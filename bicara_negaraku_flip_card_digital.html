@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BICARA NEGARAKU 🇲🇾 — FLIP CARD DIGITAL GLOW</title>
+    <style>
+        /* =========================================================
+           1. ASAS & SKIM WARNA PATRIOTIK NEON GLOW
+           ========================================================= */
+        :root {
+            --biru-utama: #002B7F;
+            --biru-glow: #0077FF;
+            --merah-utama: #DC241F;
+            --merah-glow: #FF4D4D;
+            --kuning-utama: #FFD100;
+            --kuning-glow: #FFE600;
+            --putih: #FFFFFF;
+            --teks-gelap: #0F172A;
+            
+            --bayang-glow-kuning: 0 0 15px rgba(255, 209, 0, 0.6), 0 0 30px rgba(255, 209, 0, 0.3);
+            --bayang-glow-biru: 0 0 18px rgba(0, 119, 255, 0.5), 0 0 35px rgba(0, 43, 127, 0.4);
+            --bayang-glow-merah: 0 0 15px rgba(220, 36, 31, 0.6);
+            --bayang-kad: 0 12px 25px rgba(0, 24, 69, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', 'Arial Rounded MT Bold', sans-serif, system-ui;
+        }
+
+        body {
+            background-color: #0B132B;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 119, 255, 0.25) 0%, transparent 35%),
+                radial-gradient(circle at 85% 85%, rgba(220, 36, 31, 0.2) 0%, transparent 35%),
+                radial-gradient(circle at 50% 50%, rgba(255, 209, 0, 0.15) 0%, transparent 50%);
+            color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* BINTANG KERDIP (BG SPARKLES) */
+        .bg-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--kuning-utama);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--kuning-utama);
+            animation: kerdip 3s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes kerdip {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.6); }
+        }
+
+        /* =========================================================
+           2. HEADER & BUTANG SUARA (MUTE/UNMUTE)
+           ========================================================= */
+        header {
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .audio-toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 3px solid var(--kuning-utama);
+            color: var(--kuning-utama);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--bayang-glow-kuning);
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .audio-toggle-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--kuning-utama);
+            color: var(--teks-gelap);
+        }
+
+        .header-card {
+            background: linear-gradient(135deg, rgba(0, 43, 127, 0.95) 0%, rgba(0, 20, 60, 0.95) 100%);
+            color: var(--putih);
+            padding: 18px 25px;
+            border-radius: 28px;
+            border: 4px solid var(--kuning-utama);
+            box-shadow: var(--bayang-glow-biru), var(--bayang-glow-kuning);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(90deg, var(--merah-utama), var(--merah-utama) 20px, var(--putih) 20px, var(--putih) 40px);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 4.2vw, 3rem);
+            color: var(--kuning-utama);
+            text-shadow: 0 0 10px rgba(255, 209, 0, 0.8), 3px 3px 0px var(--merah-utama), 6px 6px 0px #000;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .subtajuk {
+            font-size: clamp(1rem, 2.2vw, 1.35rem);
+            color: #E2E8F0;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 8px rgba(255,255,255,0.4);
+        }
+
+        .arahan {
+            margin-top: 12px;
+            font-size: clamp(0.95rem, 1.7vw, 1.2rem);
+            color: var(--teks-gelap);
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--kuning-utama), #FFF066);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 30px;
+            box-shadow: var(--bayang-glow-kuning);
+            animation: denyut 2.5s infinite;
+        }
+
+        @keyframes denyut {
+            0%, 100% { transform: scale(1); box-shadow: var(--bayang-glow-kuning); }
+            50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(255, 209, 0, 0.9); }
+        }
+
+        /* =========================================================
+           3. PANEL KAWALAN (BUTANG GLOW)
+           ========================================================= */
+        .panel-kawalan {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+            margin: 16px 0;
+            width: 100%;
+            max-width: 1200px;
+            z-index: 10;
+        }
+
+        .btn {
+            background: rgba(15, 23, 42, 0.85);
+            color: var(--putih);
+            border: 3px solid var(--biru-glow);
+            padding: 12px 22px;
+            font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 0px var(--biru-utama), var(--bayang-glow-biru);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 0px var(--biru-utama), 0 0 25px var(--biru-glow);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0px var(--biru-utama);
+        }
+
+        .btn-buka {
+            background: rgba(22, 101, 52, 0.85);
+            border-color: #4ADE80;
+            box-shadow: 0 4px 0px #14532D, 0 0 15px rgba(74, 222, 128, 0.4);
+        }
+        .btn-buka:hover {
+            box-shadow: 0 6px 0px #14532D, 0 0 25px rgba(74, 222, 128, 0.8);
+        }
+
+        .btn-tutup {
+            background: rgba(153, 27, 27, 0.85);
+            border-color: #FCA5A5;
+            box-shadow: 0 4px 0px #7F1D1D, 0 0 15px rgba(252, 165, 165, 0.4);
+        }
+        .btn-tutup:hover {
+            box-shadow: 0 6px 0px #7F1D1D, 0 0 25px rgba(252, 165, 165, 0.8);
+        }
+
+        .btn-semula {
+            background: rgba(180, 83, 9, 0.85);
+            border-color: var(--kuning-utama);
+            box-shadow: 0 4px 0px #78350F, var(--bayang-glow-kuning);
+        }
+        .btn-semula:hover {
+            box-shadow: 0 6px 0px #78350F, 0 0 25px var(--kuning-glow);
+        }
+
+        /* =========================================================
+           4. GRID FLIP CARD 3D WITH NEO-GLOW
+           ========================================================= */
+        .container-kad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            flex-grow: 1;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .kad-wrapper {
+            perspective: 1200px;
+            height: 390px;
+            width: 100%;
+        }
+
+        .kad {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+            border-radius: 26px;
+        }
+
+        .kad:hover {
+            animation: kadPulse 1.5s infinite alternate;
+        }
+
+        @keyframes kadPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+
+        .kad.terbalik {
+            transform: rotateY(180deg);
+            animation: none;
+        }
+
+        .kad-muka {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 18px;
+            box-shadow: var(--bayang-kad);
+            border: 4px solid var(--kuning-utama);
+            overflow: hidden;
+        }
+
+        /* BAGIAN HADAPAN KAD */
+        .kad-hadapan {
+            background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+            color: var(--biru-utama);
+            box-shadow: 0 0 15px rgba(255, 209, 0, 0.3), var(--bayang-kad);
+        }
+
+        .kad-hadapan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 14px;
+            background: linear-gradient(90deg, var(--biru-utama) 0% 25%, var(--merah-utama) 25% 50%, var(--kuning-utama) 50% 75%, var(--biru-utama) 75% 100%);
+        }
+
+        .label-kad {
+            background: var(--biru-utama);
+            color: var(--kuning-utama);
+            font-size: 1rem;
+            font-weight: 900;
+            padding: 5px 16px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            align-self: flex-start;
+            box-shadow: 0 0 10px rgba(0, 43, 127, 0.5);
+            border: 1px solid var(--kuning-utama);
+        }
+
+        .ilustrasi-container {
+            width: 105px;
+            height: 105px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.3) 0%, rgba(255, 209, 0, 0.05) 70%);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: inset 0 0 15px rgba(255, 209, 0, 0.4);
+        }
+
+        .lirik-teks {
+            font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+            font-weight: 900;
+            text-align: center;
+            color: var(--merah-utama);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+            line-height: 1.3;
+            margin: 5px 0;
+        }
+
+        .petunjuk-klik {
+            font-size: 0.85rem;
+            color: var(--biru-utama);
+            background: rgba(0, 119, 255, 0.12);
+            padding: 6px 14px;
+            border-radius: 14px;
+            font-weight: 800;
+            border: 1.5px solid rgba(0, 119, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* BAGIAN BELAKANG KAD NEON GLOW */
+        .kad-belakang {
+            background: linear-gradient(135deg, #001F5B 0%, #000B26 100%);
+            color: var(--putih);
+            transform: rotateY(180deg);
+            border: 4px solid var(--kuning-utama);
+            box-shadow: var(--bayang-glow-kuning), 0 0 30px rgba(0, 119, 255, 0.6);
+            justify-content: space-between;
+        }
+
+        .maksud-tajuk {
+            color: var(--kuning-utama);
+            font-size: 1.15rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 2px dashed var(--kuning-utama);
+            padding-bottom: 6px;
+            width: 100%;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 209, 0, 0.7);
+        }
+
+        .maksud-teks {
+            font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            margin: auto 0;
+            padding: 0 6px;
+        }
+
+        .ikon-balik {
+            font-size: 0.85rem;
+            color: var(--kuning-utama);
+            background: rgba(255, 209, 0, 0.15);
+            padding: 5px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--kuning-utama);
+        }
+
+        /* =========================================================
+           5. FOOTER
+           ========================================================= */
+        footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--kuning-utama);
+            font-weight: bold;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 8px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 209, 0, 0.3);
+            box-shadow: var(--bayang-glow-kuning);
+            z-index: 10;
+        }
+
+        /* =========================================================
+           6. RESPONSIVE MEDIA QUERIES
+           ========================================================= */
+        @media (max-width: 1024px) {
+            .container-kad {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .kad-wrapper {
+                height: 330px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container-kad {
+                grid-template-columns: 1fr;
+            }
+            .kad-wrapper {
+                height: 290px;
+            }
+            .audio-toggle-btn {
+                width: 42px;
+                height: 42px;
+            }
+            .panel-kawalan {
+                flex-direction: row;
+            }
+            .btn {
+                flex: 1 1 40%;
+                justify-content: center;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .kad-wrapper {
+                height: 450px;
+            }
+            .ilustrasi-container {
+                width: 135px;
+                height: 135px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BINTANG KERDIP DI LATAR BELAKANG -->
+    <div id="sparkle-container"></div>
+
+    <!-- HEADER UTAMA & BUTANG SUARA -->
+    <header>
+        <button class="audio-toggle-btn" id="audioToggleBtn" onclick="toggleAudio()" title="Hidup/Matikan Bunyi">
+            <!-- Ikon Audio ON -->
+            <svg id="iconAudioOn" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <!-- Ikon Audio OFF -->
+            <svg id="iconAudioOff" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:none;"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+
+        <div class="header-card">
+            <h1>
+                <span>BICARA NEGARAKU</span>
+                <span style="font-size: 0.85em;">🇲🇾</span>
+            </h1>
+            <div class="subtajuk">Mata Pelajaran Sejarah Tahun 5: Identiti Negara Kita</div>
+        </div>
+        <div class="arahan">✨ Klik kad untuk melihat maksud lirik! ✨</div>
+    </header>
+
+    <!-- PANEL BUTANG KAWALAN -->
+    <div class="panel-kawalan">
+        <button class="btn btn-buka" onclick="bukaSemuaKad()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Lihat Semua Maksud
+        </button>
+        <button class="btn btn-tutup" onclick="tutupSemuaKad()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.962 8.962 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>
+            Tutup Semua Kad
+        </button>
+        <button class="btn btn-semula" onclick="mulaSemuaKad()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Mula Semula
+        </button>
+    </div>
+
+    <!-- UTAMA: 4 FLIP CARD DIGITAL -->
+    <main class="container-kad">
+
+        <!-- KAD 1 -->
+        <div class="kad-wrapper">
+            <div class="kad" onclick="pusingKad(this)">
+                <!-- Hadapan -->
+                <div class="kad-muka kad-hadapan">
+                    <span class="label-kad">KAD 1</span>
+                    <div class="ilustrasi-container">
+                        <svg width="75" height="75" viewBox="0 0 64 64" fill="none">
+                            <rect x="8" y="12" width="48" height="32" rx="4" fill="#002B7F"/>
+                            <path d="M8 20H56M8 28H56M8 36H56" stroke="#DC241F" stroke-width="4"/>
+                            <path d="M8 12H32V28H8V12Z" fill="#002B7F"/>
+                            <path d="M16 16A5 5 0 1 0 22 22A4 4 0 1 1 16 16Z" fill="#FFD100"/>
+                            <polygon points="23,17 24,19 26,19 24.5,20 25,22 23,21 21,22 21.5,20 20,19 22,19" fill="#FFD100"/>
+                            <path d="M10 44V56" stroke="#475569" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="lirik-teks">“Tanah tumpahnya darahku”</div>
+                    <div class="petunjuk-klik">
+                        <span>🔄 Klik lihat maksud</span>
+                    </div>
+                </div>
+                <!-- Belakang -->
+                <div class="kad-muka kad-belakang">
+                    <span class="maksud-tajuk">MAKSUD LIRIK</span>
+                    <div class="maksud-teks">“Negara tempat kita menumpahkan taat setia.”</div>
+                    <span class="ikon-balik">Klik untuk kembali</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAD 2 -->
+        <div class="kad-wrapper">
+            <div class="kad" onclick="pusingKad(this)">
+                <!-- Hadapan -->
+                <div class="kad-muka kad-hadapan">
+                    <span class="label-kad">KAD 2</span>
+                    <div class="ilustrasi-container">
+                        <svg width="75" height="75" viewBox="0 0 64 64" fill="none">
+                            <circle cx="22" cy="24" r="8" fill="#002B7F"/>
+                            <path d="M10 44C10 36 15 34 22 34C29 34 34 36 34 44" stroke="#002B7F" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="42" cy="24" r="8" fill="#DC241F"/>
+                            <path d="M30 44C30 36 35 34 42 34C49 34 54 36 54 44" stroke="#DC241F" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M26 28L38 28" stroke="#FFD100" stroke-width="4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="lirik-teks">“Rakyat hidup, bersatu dan maju”</div>
+                    <div class="petunjuk-klik">
+                        <span>🔄 Klik lihat maksud</span>
+                    </div>
+                </div>
+                <!-- Belakang -->
+                <div class="kad-muka kad-belakang">
+                    <span class="maksud-tajuk">MAKSUD LIRIK</span>
+                    <div class="maksud-teks">“Rakyat hidup dengan aman, bersatu padu dan berusaha memajukan negara.”</div>
+                    <span class="ikon-balik">Klik untuk kembali</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAD 3 -->
+        <div class="kad-wrapper">
+            <div class="kad" onclick="pusingKad(this)">
+                <!-- Hadapan -->
+                <div class="kad-muka kad-hadapan">
+                    <span class="label-kad">KAD 3</span>
+                    <div class="ilustrasi-container">
+                        <svg width="75" height="75" viewBox="0 0 64 64" fill="none">
+                            <path d="M36 12A16 16 0 1 0 52 36A12 12 0 1 1 36 12Z" fill="#FFD100"/>
+                            <path d="M12 20L18 24M48 16L44 22M20 48L24 42" stroke="#FFD100" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="28" cy="20" r="3" fill="#DC241F"/>
+                            <circle cx="48" cy="32" r="2" fill="#002B7F"/>
+                        </svg>
+                    </div>
+                    <div class="lirik-teks">“Rahmat bahagia, Tuhan kurniakan”</div>
+                    <div class="petunjuk-klik">
+                        <span>🔄 Klik lihat maksud</span>
+                    </div>
+                </div>
+                <!-- Belakang -->
+                <div class="kad-muka kad-belakang">
+                    <span class="maksud-tajuk">MAKSUD LIRIK</span>
+                    <div class="maksud-teks">“Memohon rahmat dan kebahagiaan daripada Tuhan untuk negara dan rakyat.”</div>
+                    <span class="ikon-balik">Klik untuk kembali</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAD 4 -->
+        <div class="kad-wrapper">
+            <div class="kad" onclick="pusingKad(this)">
+                <!-- Hadapan -->
+                <div class="kad-muka kad-hadapan">
+                    <span class="label-kad">KAD 4</span>
+                    <div class="ilustrasi-container">
+                        <svg width="75" height="75" viewBox="0 0 64 64" fill="none">
+                            <path d="M12 44L16 20L28 32L32 16L36 32L48 20L52 44H12Z" fill="#FFD100" stroke="#B45309" stroke-width="2"/>
+                            <rect x="12" y="44" width="40" height="8" rx="2" fill="#002B7F"/>
+                            <circle cx="32" cy="16" r="3" fill="#DC241F"/>
+                            <circle cx="16" cy="20" r="2.5" fill="#DC241F"/>
+                            <circle cx="48" cy="20" r="2.5" fill="#DC241F"/>
+                        </svg>
+                    </div>
+                    <div class="lirik-teks">“Raja kita, selamat bertakhta”</div>
+                    <div class="petunjuk-klik">
+                        <span>🔄 Klik lihat maksud</span>
+                    </div>
+                </div>
+                <!-- Belakang -->
+                <div class="kad-muka kad-belakang">
+                    <span class="maksud-tajuk">MAKSUD LIRIK</span>
+                    <div class="maksud-teks">“Mendoakan agar raja terus memerintah negara dengan selamat.”</div>
+                    <span class="ikon-balik">Klik untuk kembali</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        Bahan Bantu Mengajar Digital • Sejarah Tahun 5 • Identiti Negara Kita 🇲🇾
+    </footer>
+
+    <!-- SCRIPT WEB AUDIO API & INTERAKSI -->
+    <script>
+        /* =========================================================
+           1. PENJANAAN ELEMEN BINTANG KERDIP (SPARKLES)
+           ========================================================= */
+        function penjanaSparkles() {
+            const container = document.getElementById('sparkle-container');
+            const jumlahBintang = 30;
+            for (let i = 0; i < jumlahBintang; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'bg-sparkle';
+                sparkle.style.top = Math.random() * 100 + 'vh';
+                sparkle.style.left = Math.random() * 100 + 'vw';
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+        penjanaSparkles();
+
+        /* =========================================================
+           2. SINTESIS AUDIO TULEN (WEB AUDIO API - 100% OFFLINE)
+           ========================================================= */
+        let audioCtx = null;
+        let audioMuted = false;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Toggle Suara On/Off
+        function toggleAudio() {
+            audioMuted = !audioMuted;
+            document.getElementById('iconAudioOn').style.display = audioMuted ? 'none' : 'block';
+            document.getElementById('iconAudioOff').style.display = audioMuted ? 'block' : 'none';
+            if (!audioMuted) {
+                playChimeSound();
+            }
+        }
+
+        // Kesan Bunyi Flip Kad ('Woosh' / 'Pop' Digital)
+        function playFlipSound() {
+            if (audioMuted) return;
+            initAudioContext();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.15);
+
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // Kesan Bunyi Butang Kawalan ('Chime' / 'Bell')
+        function playChimeSound() {
+            if (audioMuted) return;
+            initAudioContext();
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, now); // C5
+            osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+
+        // Kesan Bunyi Kemenangan / Syabas (Melodi Kualiti Apabila Semua Kad Terbuka)
+        function playVictoryFanfare() {
+            if (audioMuted) return;
+            initAudioContext();
+
+            const nota = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            const masaMula = audioCtx.currentTime;
+
+            nota.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, masaMula + idx * 0.1);
+
+                gain.gain.setValueAtTime(0.2, masaMula + idx * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, masaMula + idx * 0.1 + 0.3);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(masaMula + idx * 0.1);
+                osc.stop(masaMula + idx * 0.1 + 0.3);
+            });
+        }
+
+        /* =========================================================
+           3. LOGIK KAWALAN FLIP CARD
+           ========================================================= */
+        function pusingKad(elementKad) {
+            playFlipSound();
+            elementKad.classList.toggle('terbalik');
+            semakLengkap();
+        }
+
+        function bukaSemuaKad() {
+            playChimeSound();
+            const semuaKad = document.querySelectorAll('.kad');
+            semuaKad.forEach(kad => {
+                kad.classList.add('terbalik');
+            });
+            setTimeout(playVictoryFanfare, 300);
+        }
+
+        function tutupSemuaKad() {
+            playChimeSound();
+            const semuaKad = document.querySelectorAll('.kad');
+            semuaKad.forEach(kad => {
+                kad.classList.remove('terbalik');
+            });
+        }
+
+        function mulaSemuaKad() {
+            tutupSemuaKad();
+        }
+
+        // Semak sekiranya keempat-empat kad telah berjaya dibuka oleh murid
+        function semakLengkap() {
+            const semuaKad = document.querySelectorAll('.kad');
+            const kadTerbalik = document.querySelectorAll('.kad.terbalik');
+            if (semuaKad.length === kadTerbalik.length) {
+                setTimeout(playVictoryFanfare, 400);
+            }
+        }
+    </script>
+</body>
+</html>
